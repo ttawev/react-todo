@@ -1,0 +1,121 @@
+.todo{
+    padding: 20px;
+    width: 100%;
+    background: white;
+    border-radius: 20px;
+    margin-top: 10px;
+}
+
+.todo-text{
+    font-size: 30px;
+    font-weight: bold;
+    width: 300px;
+    border-radius: 10px;
+}
+
+.todo-text.editingInput{
+    border: 1px solid black;
+}
+
+.todo-text::placeholder{
+    color: black;
+}
+
+.todo-text.done{
+    font-weight: normal;
+    color: grey;
+    text-decoration: line-through;
+}
+
+.time{
+    font-size: 12px;
+    font-family:Verdana, Geneva, Tahoma, sans-serif
+}
+
+.flex{
+    display: flex;
+    align-items: center;
+}
+
+.btns{
+    position: relative;
+    width: 40px;
+    height: 40px;
+}
+.span{
+    position: relative;
+    display: block;
+    width: 40px;
+    height: 40px;
+    z-index: 2;
+    background: inherit;
+}
+
+.span .span-line{
+    display: block;
+    width: 40px;
+    height: 2px;
+    background: black;
+    z-index: 3;
+    transition: .6s;
+}
+
+.span .span-line:nth-child(1){
+    position: absolute;
+    top: 10%;
+}
+.span .span-line:nth-child(2){
+    position: absolute;
+    top: 50%;
+}
+.span .span-line:nth-child(3){
+    position: absolute;
+    top: 90%;
+}
+
+.span .span-line.active:nth-child(1){
+    top: 50%;
+    rotate: 45deg;
+}
+.span .span-line.active:nth-child(3){
+    top: 50%;
+    rotate: -45deg;
+}
+.span .span-line.active:nth-child(2){
+    display: none;
+}
+
+.btns button{
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    box-shadow: -5px -5px 10px grey;
+    transition: .5s all;
+    width: 40px;
+    height: 40px;
+    transition: .6s;
+}
+
+.btns button img{
+    color: aqua;
+}
+.nosetting{
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.setting:nth-child(1){
+    color: red;
+    background: red;
+    top: -35px;
+}
+.setting:nth-child(2){
+    top: -35px;
+    
+}
+.setting:nth-child(3){
+    left: -35px;
+    bottom: 2px;
+}
