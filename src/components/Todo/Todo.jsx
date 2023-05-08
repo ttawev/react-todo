@@ -1,47 +1,43 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Button from '../Button/Button'
 import './Todo.css'
 import completeImg from '../../img/complete.png'
 import noComplete from '../../img/no-compl.png'
 import editImg from '../../img/edit.png'
 import deleteImg from '../../img/deleteImg.png'
+import { db } from '../../firebase'
+import { updateDoc, doc, deleteDoc } from 'firebase/firestore'
 
-const Todo = ({todo, setTodoList}) => {
-    const handleCheck = () => {
-        setTodoList((prev) => {
-            return prev.map(el => {
-                return el.id === todo.id ? {...el, isActive: !el.isActive} : el
-            })
+const Todo = React.memo(({todo, setTodoList}) => {
+    const handleCheck = async () => {
+        const todoRef = doc(db, 'todos', todo.id)
+        await updateDoc(todoRef, {
+            isActive: !todo.isActive
         })
     }
-    const handleEdit = () => {
-        setTodoList((prev) => {
-            return prev.map(el => {
-                return el.id === todo.id ? {...el, isEditing: !el.isEditing} : {...el, isEditing: false}
-            })
+    const handleEdit = async () => {
+        const todoRef = doc(db, 'todos', todo.id)
+        await updateDoc(todoRef, {
+            isEditing: !todo.isEditing
         })
     }
-    const handleDelete = () => {
-        setTodoList((prev) => {
-            return prev.filter(el => {
-                return todo.id !== el.id
-            })
-        })
+    const handleDelete = async () => {
+        await deleteDoc(doc(db, 'todos', todo.id));
     }
 
 
-    const handleChange = (e) => {
-        setTodoList((prev) => {
-            return prev.map(el => {
-                return todo.id === el.id ? {...el, todoText: e.target.value} : el
-            })
+    const handleChange = async (e) => {
+        const todoRef = doc(db, 'todos', todo.id)
+        await updateDoc(todoRef, {
+            todoText: e.target.value
         })
     }
 
-    const handleSetting = () => {
+    const handleSetting = (e) => {
+        console.log(e.target);
         setTodoList((prev) => {
             return prev.map(el => {
-                return todo.id === el.id ? {...el, isSetting: !el.isSetting} : {...el, isSetting: false}
+                return todo.id === el.id ? {...el, settingActive: !el.settingActive} : {...el, settingActive: false}
             })
         })
     }
@@ -59,17 +55,17 @@ const Todo = ({todo, setTodoList}) => {
             
             <div className='btns' >
                 <span className='span' onClick={handleSetting}>
-                    <span className={`span-line ${todo.isSetting ? 'active' : ''}`}></span>
-                    <span className={`span-line ${todo.isSetting ? 'active' : ''}`}></span>
-                    <span className={`span-line ${todo.isSetting ? 'active' : ''}`}></span>
+                    <span className={`span-line ${todo.settingActive ? 'active' : ''}`}></span>
+                    <span className={`span-line ${todo.settingActive ? 'active' : ''}`}></span>
+                    <span className={`span-line ${todo.settingActive ? 'active' : ''}`}></span>
                 </span>
-                <Button onClick={handleCheck} className={`${todo.isSetting ? 'setting' : 'nosetting'}`}><img src={todo.isActive ? completeImg : noComplete} alt="Complete"/></Button>
-                <Button onClick={handleEdit} className={`${todo.isSetting ? 'setting' : 'nosetting'}`}>{todo.isEditing? <img src={completeImg}/> : <img src={editImg} />}</Button>
-                <Button onClick={handleDelete} className={`${todo.isSetting ? 'setting' : 'nosetting'}`}><img src={deleteImg} alt="delete" /></Button>
+                <Button onClick={handleCheck} className={`${todo.settingActive ? 'setting' : 'nosetting'}`}><img src={todo.isActive ? completeImg : noComplete} alt="Complete"/></Button>
+                <Button onClick={handleEdit} className={`${todo.settingActive ? 'setting' : 'nosetting'}`}>{todo.isEditing? <img src={completeImg} alt='complete'/> : <img src={editImg} alt='editing'/>}</Button>
+                <Button onClick={handleDelete} className={`${todo.settingActive ? 'setting' : 'nosetting'}`}><img src={deleteImg} alt="delete" /></Button>
             </div>
         </div>
     </li>
   )
-}
+})
 
 export default Todo
